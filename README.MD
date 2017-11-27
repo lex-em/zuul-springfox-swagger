@@ -34,7 +34,7 @@ zuul:
             protocol: https://
 ```
 
-For use it you should include dependency (**DO NOT AVAILABLE AT THIS MOMENT #1**):
+For use it you should include dependency (**DO NOT AVAILABLE AT THIS MOMENT [#1](/../../issues/1)**):
 ```groovy
 dependencies {
     ...
