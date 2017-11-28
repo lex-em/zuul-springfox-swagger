@@ -1,3 +1,5 @@
+import java.time.format.DateTimeFormatter
+
 buildscript {
     repositories {
         mavenCentral()
@@ -20,7 +22,6 @@ sourceCompatibility = 1.8
 
 // plugin settings
 jar {
-    archiveName "${artifactId}.jar"
     manifest {
         attributes(
                 "Group": group,
@@ -31,6 +32,24 @@ jar {
         )
     }
 }
+
+//tasks
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+task expandDescriptor(type: Copy) {
+    from 'descriptor.json'
+    into 'build'
+    expand(version: project.version, date: java.time.LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+}
+
+build.dependsOn expandDescriptor
 
 //dependency management
 def springCloudVersion = 'Dalston.SR3'
