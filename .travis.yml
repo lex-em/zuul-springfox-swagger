@@ -1,3 +1,10 @@
 language: java
 install: true
 script: gradle build --continue
+deploy:
+  key:
+    secure: Koqvbo26cGgG5QHR9zSGojtvkVtRMxkd3rTejEyWHXnmjbDAnWVLeJf81pz6Vn2lrHbZkCHx+Ec4t3Cptq+v5fXlrgKtjYUORirMK4KWKT0ZLwE41oFo37Y8YVtRLlUiIk7BIteUbY6+p9HTlcQE60TCo9DugVX6Kn8c5tvBtukjckq3uL2/K+IIhtVbHCL6IEMKlQ0O0Wzvhe2m2qTIhAyCjnHgrTM9TxWYqxU5K0ShpL/OgySzXPcJPxy49jPDjp1FmtiMU/Lu5L7l1pzJ8vfWay7rfwJuu0VOy4cCno+8NFNEz5To08eDSIMsHovyqD7CnWkOOeEp9Vkd+D/Td1m2+7xX4UO1HqPmoTaSi2JrBo6FLDdfW+MWd5QGFsSP66hRSaEVV6AicgC1qreFqQQJKxl7XeLlXBt/HCN3qMhh0mKWggN76gnVV9yQY3n1QmtxLR3xgn8DC4xcAepYiDyUsxibVk1k5q1YHmGTpn2AfkrxhB5Dw97f/T8FrG2iO32NopieiugKh7Ln60TEsgDzsscyVic9OGEhQpCHVBI34jSO+/alh8ui+ULcNpreltJNk+tQAGejvMqDTEcYpAXKcuij2CzlFGchnBXnVnJquXP9i/s0s8k/VxARlrY8zUy2AM2lOq0LjNCEPm1whstv2lM2WmUi8mUwdzCFngI=
+  provider: bintray
+  file: "descriptor.json"
+  user: lex
+  on: master,develop
