@@ -15,14 +15,14 @@
         "public_stats": true
     },
     "version": {
-        "name": "0.5",
-        "desc": "This is a version",
-        "released": "2015-01-04",
-        "vcs_tag": "0.5",
+        "name": "${version}",
+//        "desc": "This is a version",
+        "released": "${date}",
+        "vcs_tag": "${version}",
         "gpgSign": false
     },
     "files":[
-        {"includePattern": "build/libs/(.*)", "uploadPattern": "/$1"}
+        {"includePattern": "build/libs/(.*)", "uploadPattern": "/\$1"}
     ],
     "publish": true
 }
