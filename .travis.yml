@@ -7,4 +7,6 @@ deploy:
   provider: bintray
   file: "build/descriptor.json"
   user: lex
-  on: master,develop
+  on:
+    brunch: master
+    brunch: develop
