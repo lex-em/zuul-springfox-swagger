@@ -22,7 +22,7 @@
         "gpgSign": false
     },
     "files":[
-        {"includePattern": "build/libs/(.*)", "uploadPattern": "/\$1"}
+        {"includePattern": "build/libs/(.*)", "uploadPattern": "ru/reliabletech/zuul-springfox-swagger/${version}/\$1"}
     ],
     "publish": true
 }

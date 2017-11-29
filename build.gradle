@@ -12,20 +12,37 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: "io.spring.dependency-management"
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 // project properties
 group 'ru.reliabletech'
-def artifactId = 'zuul-springfox-swagger'
+def artifact = 'zuul-springfox-swagger'
 version '0.1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 // plugin settings
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId artifact
+            version project.version
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenPublication {
+        destination = file("$buildDir/libs/$artifact-${version}.pom")
+    }
+}
+
 jar {
     manifest {
         attributes(
                 "Group": group,
-                "Artifact-Id": artifactId,
+                "Artifact-Id": artifact,
                 "Version": version,
                 "Source-Compatibility": sourceCompatibility,
                 "Build-Time": new Date()
