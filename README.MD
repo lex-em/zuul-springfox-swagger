@@ -9,9 +9,6 @@ Repository contains library for using springfox swagger UI under ZUUL proxy
 
  - Gradle 3.x, or 4.x.
  - Java 8 or later
- 
-## Version information
-Version: 0.1.0-SNAPSHOT
 
 ## License information
 Swagger addon for Spring Cloud ZUUL is open source software released under the [Apache 2.0 license][1].
@@ -35,7 +32,7 @@ zuul:
             protocol: https://
 ```
 
-For use it you should include dependency (**DO NOT AVAILABLE AT THIS MOMENT [#1](/../../issues/1)**):
+For use it you should include dependency (**SNAPSHOTS DO NOT AVAILABLE AT THIS MOMENT [#1](/../../issues/1)**):
 ```groovy
 dependencies {
     ...
