@@ -14,7 +14,7 @@ Repository contains library for using springfox swagger UI under ZUUL proxy
 Swagger addon for Spring Cloud ZUUL is open source software released under the [Apache 2.0 license][1].
 
 ## Usage
-Addon extend ZUUL configuration:
+Plugin extends ZUUL configuration:
 ```yaml
 zuul:
     prefix: /api
@@ -32,7 +32,7 @@ zuul:
             protocol: https://
 ```
 
-For use it you should include dependency (**SNAPSHOTS DO NOT AVAILABLE AT THIS MOMENT [#1](/../../issues/1)**):
+For use it you should include dependency (** SNAPSHOTS DO NOT AVAILABLE AT THIS MOMENT [#1](/../../issues/1)**):
 ```groovy
 dependencies {
     ...
@@ -49,6 +49,9 @@ public class YourConfiguration {
     ...
 }
 ```
+Also plugin needs Swagger2 and RestTemplate (load balanced is preferable) to be configured.
+
+If the project configuration do not contain that, then it will be configured automatically (since version 0.1.1).
 
 ## Build
 
