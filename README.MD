@@ -1,5 +1,5 @@
 # Swagger addon for Spring Cloud ZUUL
-[![Build Status](https://travis-ci.org/lex-em/zuul-springfox-swagger.svg?branch=develop)](https://travis-ci.org/lex-em/zuul-springfox-swagger)
+[![Build Status](https://travis-ci.org/lex-em/zuul-springfox-swagger.svg?branch=develop)](https://travis-ci.org/lex-em/zuul-springfox-swagger)[![Release](https://jitpack.io/v/ru.reliabletech/zuul-springfox-swagger.svg)](https://jitpack.io/#ru.reliabletech/zuul-springfox-swagger)
 
 ## Overview
 

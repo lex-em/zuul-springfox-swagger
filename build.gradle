@@ -19,6 +19,7 @@ group 'ru.reliabletech'
 def artifact = 'zuul-springfox-swagger'
 version '0.1.2-SNAPSHOT'
 sourceCompatibility = 1.8
+def currentDate = java.time.LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
 // plugin settings
 publishing {
@@ -45,7 +46,7 @@ jar {
                 "Artifact-Id": artifact,
                 "Version": version,
                 "Source-Compatibility": sourceCompatibility,
-                "Build-Time": new Date()
+                "Build-Time": currentDate
         )
     }
 }
@@ -63,7 +64,7 @@ artifacts {
 task expandDescriptor(type: Copy) {
     from 'descriptor.json'
     into 'build'
-    expand(version: project.version, date: java.time.LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+    expand(version: project.version, date: currentDate)
 }
 
 build.dependsOn expandDescriptor
