@@ -46,6 +46,12 @@ Also plugin needs Swagger2 and RestTemplate (load balanced is preferable) to be 
 If the project configuration do not contain that, then it will be configured automatically (since version 0.1.1).
 ### Dependency 
 ```groovy
+repositories {
+    ...
+    jcenter() 
+    // or
+    maven { url 'https://jitpack.io' }
+}
 dependencies {
     ...
     compile "ru.reliabletech:zuul-springfox-swagger:${zuulSpringfoxSwaggerVersion}"
