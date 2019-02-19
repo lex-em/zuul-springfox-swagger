@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.reliabletech.zuul.swagger.exception.NotFoundException;
 import ru.reliabletech.zuul.swagger.props.ServicesSwaggerInfo;
-import ru.reliabletech.zuul.swagger.service.RouteService;
 
 /**
+ * General implementation
+ *
  * @author Alexandr Emelyanov <mr.lex91@gmail.com>
  * on 27.11.2017.
  */
@@ -44,7 +45,7 @@ public class GenericSwaggerService implements SwaggerService {
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
-            throw new NotFoundException(); // TODO
+            throw new NotFoundException();
         }
     }
 }

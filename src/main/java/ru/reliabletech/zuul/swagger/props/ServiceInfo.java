@@ -3,6 +3,8 @@ package ru.reliabletech.zuul.swagger.props;
 import lombok.Data;
 
 /**
+ * Service info
+ *
  * @author Alexandr Emelyanov <mr.lex91@gmail.com>
  * on 27.11.2017.
  */

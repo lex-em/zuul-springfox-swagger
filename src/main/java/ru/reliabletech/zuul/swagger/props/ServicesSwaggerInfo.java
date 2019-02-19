@@ -1,6 +1,6 @@
 package ru.reliabletech.zuul.swagger.props;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
+ * Extended Zuul configuration for plugin purposes
+ *
  * @author Alexandr Emelyanov <mr.lex91@gmail.com>
  * on 27.11.2017.
  */

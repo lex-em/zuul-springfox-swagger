@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.reliabletech.zuul.swagger.service.SwaggerService;
 
 /**
- * Controller for api
+ * Controller for swagger-ui documentation requests
  *
  * @author Alexandr Emelyanov <mr.lex91@gmail.com>
  * on 27.11.2017.
