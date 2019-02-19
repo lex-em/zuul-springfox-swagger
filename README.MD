@@ -44,6 +44,9 @@ public class YourConfiguration {
 Also plugin needs Swagger2 and RestTemplate (load balanced is preferable) to be configured.
 
 If the project configuration do not contain that, then it will be configured automatically (since version 0.1.1).
+
+Since 0.2.0 version plugin supports versioned api (and other with route transformations via ServiceRouteMapper).
+Any `org.springframework.cloud.netflix.zuul.filters.discovery.ServiceRouteMapper` bean will turn on this approach, but here some nuances, described in #3.
 ### Dependency 
 ```groovy
 repositories {
