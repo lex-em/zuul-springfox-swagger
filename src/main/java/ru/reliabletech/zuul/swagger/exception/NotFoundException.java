@@ -1,4 +1,4 @@
-package ru.reliabletech.zuul.swagger;
+package ru.reliabletech.zuul.swagger.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

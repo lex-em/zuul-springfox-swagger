@@ -1,3 +1,4 @@
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 buildscript {
@@ -16,39 +17,10 @@ apply plugin: 'maven-publish'
 
 // project properties
 group 'ru.reliabletech'
-def artifact = 'zuul-springfox-swagger'
-version '0.1.1'
+def libName = 'zuul-springfox-swagger'
+version '0.2.0'
 sourceCompatibility = 1.8
-
-// plugin settings
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            groupId project.group
-            artifactId artifact
-            version project.version
-        }
-    }
-}
-
-model {
-    tasks.generatePomFileForMavenPublication {
-        destination = file("$buildDir/libs/$artifact-${version}.pom")
-    }
-}
-
-jar {
-    manifest {
-        attributes(
-                "Group": group,
-                "Artifact-Id": artifact,
-                "Version": version,
-                "Source-Compatibility": sourceCompatibility,
-                "Build-Time": new Date()
-        )
-    }
-}
+def currentDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
 //tasks
 task sourcesJar(type: Jar) {
@@ -63,13 +35,40 @@ artifacts {
 task expandDescriptor(type: Copy) {
     from 'descriptor.json'
     into 'build'
-    expand(version: project.version, date: java.time.LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+    expand(version: project.version, date: currentDate)
 }
 
 build.dependsOn expandDescriptor
+compileJava.dependsOn(processResources)
+
+// plugin settings
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            groupId project.group
+            artifactId libName
+            version project.version
+
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                "Group": group,
+                "Artifact-Id": libName,
+                "Version": version,
+                "Source-Compatibility": sourceCompatibility,
+                "Build-Time": currentDate
+        )
+    }
+}
 
 //dependency management
-def springCloudVersion = 'Dalston.SR3'
+def springCloudVersion = 'Finchley.SR1'
 
 dependencyManagement {
     imports {
@@ -82,12 +81,11 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-eureka'
-    compile 'org.springframework.cloud:spring-cloud-starter-zuul'
-    compile 'org.projectlombok:lombok:1.16.18'
-    compile 'io.springfox:springfox-swagger2:2.7.0'
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    implementation 'org.projectlombok:lombok:1.18.4'
+    compile 'io.springfox:springfox-swagger2:2.9.2'
     compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:1.0.0'
-}
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
+    compileOnly 'org.springframework.boot:spring-boot-configuration-processor:1.5.9.RELEASE'
 }

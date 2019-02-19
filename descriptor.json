@@ -22,7 +22,8 @@
         "gpgSign": false
     },
     "files":[
-        {"includePattern": "build/libs/(.*)", "uploadPattern": "ru/reliabletech/zuul-springfox-swagger/${version}/\$1"}
+        {"includePattern": "build/libs/(.*)", "uploadPattern": "ru/reliabletech/zuul-springfox-swagger/${version}/\$1"},
+        {"includePattern": "build/publications/maven/pom-default.xml", "uploadPattern": "ru/reliabletech/zuul-springfox-swagger/${version}/pom-${version}.xml"}
     ],
     "publish": true
 }

@@ -2,13 +2,11 @@ package ru.reliabletech.zuul.swagger;
 
 import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
+ * Enabling ZuulSpringfoxSwaggerPlugin annotation.
+ *
  * @author Alexandr Emelyanov <mr.lex91@gmail.com>
  * on 27.11.2017.
  */
