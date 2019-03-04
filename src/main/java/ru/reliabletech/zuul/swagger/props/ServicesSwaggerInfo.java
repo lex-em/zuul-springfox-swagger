@@ -53,6 +53,7 @@ public class ServicesSwaggerInfo {
 
     public Optional<String> getServicePath(String route) {
         return Optional.ofNullable(routes.get(route))
-                .map(ServiceInfo::getPath);
+                .map(ServiceInfo::getPath)
+                .map(path -> path.replaceAll("^/", "").replaceAll("/\\*\\*", ""));
     }
 }

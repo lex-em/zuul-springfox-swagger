@@ -28,7 +28,12 @@ public class GenericSwaggerService implements SwaggerService {
     public ObjectNode getSwaggerDoc(String route) {
         ObjectNode swaggerDocumentation = getOriginalSwaggerDoc(route);
         swaggerDocumentation.set("host", new TextNode(""));
-        swaggerDocumentation.set("basePath", new TextNode(servicesSwaggerInfo.getPrefix() + routeService.getPath(route)));
+        String path = new StringBuilder().append(servicesSwaggerInfo.getPrefix())
+                .append("/")
+                .append(routeService.getPath(route))
+                .toString()
+                .replaceAll("[/]+", "/");
+        swaggerDocumentation.set("basePath", new TextNode(path));
         return swaggerDocumentation;
     }
 
