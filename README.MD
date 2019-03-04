@@ -7,7 +7,7 @@ Repository contains library for using springfox swagger UI under ZUUL proxy
 
 ## Requirements
 
- - Gradle 3.x, or 4.x.
+ - Gradle 5.x.
  - Java 8 or later
 
 ## License information
@@ -78,7 +78,7 @@ dependencies {
 
 ## Build
 
-Gradle tasks may be running via `gradle` wrapper - `gradlew`(gradle v4.3.1) from project root folder.
+Gradle tasks may be running via `gradle` wrapper - `gradlew` from project root folder.
 
 * build: `gradle clean build`
 
