@@ -2,11 +2,15 @@ package ru.reliabletech.zuul.swagger.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.reliabletech.zuul.swagger.exception.NotFoundException;
 import ru.reliabletech.zuul.swagger.props.ServicesSwaggerInfo;
+
+import java.util.Optional;
 
 /**
  * General implementation
@@ -15,10 +19,15 @@ import ru.reliabletech.zuul.swagger.props.ServicesSwaggerInfo;
  * on 27.11.2017.
  */
 @Component
+@Slf4j
 public class GenericSwaggerService implements SwaggerService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    @Qualifier("pureRestTemplate")
+    private RestTemplate pureRestTemplate;
+    @Autowired
+    @Qualifier("loadBalancedRestTemplate")
+    private RestTemplate loadBalancedRestTemplate;
     @Autowired
     private ServicesSwaggerInfo servicesSwaggerInfo;
     @Autowired
@@ -39,8 +48,9 @@ public class GenericSwaggerService implements SwaggerService {
 
     @Override
     public ObjectNode getOriginalSwaggerDoc(String route) {
-        String serviceUrl = servicesSwaggerInfo.getServiceUrl(route)
-                .orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
+        Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
+        String serviceUrl = serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
+        RestTemplate restTemplate = serviceUrlOpt.map(x -> pureRestTemplate).orElse(loadBalancedRestTemplate);
         String url = String.format("%s/%s",
                 serviceUrl,
                 servicesSwaggerInfo.getSwaggerUrl(route));
@@ -50,6 +60,7 @@ public class GenericSwaggerService implements SwaggerService {
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
+            log.error("Requested resources URL is wrong", e);
             throw new NotFoundException();
         }
     }
