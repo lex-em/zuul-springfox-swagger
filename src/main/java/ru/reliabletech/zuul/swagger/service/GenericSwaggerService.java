@@ -49,11 +49,17 @@ public class GenericSwaggerService implements SwaggerService {
     @Override
     public ObjectNode getOriginalSwaggerDoc(String route) {
         Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
-        String serviceUrl = serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
-        RestTemplate restTemplate = serviceUrlOpt.map(x -> pureRestTemplate).orElse(loadBalancedRestTemplate);
-        String url = String.format("%s/%s",
-                serviceUrl,
-                servicesSwaggerInfo.getSwaggerUrl(route));
+        RestTemplate restTemplate = serviceUrlOpt
+                .map(x -> pureRestTemplate)
+                .orElse(loadBalancedRestTemplate);
+        String url = servicesSwaggerInfo.getDirectSwaggerDocUrl(route)
+                .orElseGet(() -> {
+                    String serviceUrl = serviceUrlOpt
+                            .orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
+                    return String.format("%s/%s",
+                            serviceUrl,
+                            servicesSwaggerInfo.getSwaggerUrl(route));
+                });
         try {
             return restTemplate.getForObject(url, ObjectNode.class);
         } catch (IllegalStateException e) {

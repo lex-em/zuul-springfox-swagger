@@ -19,6 +19,8 @@ class ServiceInfo {
 
     private String swaggerUri;
 
+    private String directSwaggerDocUrl;
+
     private String protocol = "";
 
 }
