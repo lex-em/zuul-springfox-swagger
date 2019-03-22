@@ -21,6 +21,8 @@ class ServiceInfo {
 
     private String directSwaggerBaseUrl;
 
+    private String directSwaggerPath;
+
     private String protocol = "";
 
 }
