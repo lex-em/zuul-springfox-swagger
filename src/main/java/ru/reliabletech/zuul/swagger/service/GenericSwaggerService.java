@@ -52,14 +52,11 @@ public class GenericSwaggerService implements SwaggerService {
         RestTemplate restTemplate = serviceUrlOpt
                 .map(x -> pureRestTemplate)
                 .orElse(loadBalancedRestTemplate);
-        String url = servicesSwaggerInfo.getDirectSwaggerDocUrl(route)
-                .orElseGet(() -> {
-                    String serviceUrl = serviceUrlOpt
-                            .orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
-                    return String.format("%s/%s",
-                            serviceUrl,
-                            servicesSwaggerInfo.getSwaggerUrl(route));
-                });
+        String serviceUrl = servicesSwaggerInfo.getDirectSwaggerBaseUrl(route)
+                .orElseGet(() -> serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route));
+        String url = String.format("%s/%s",
+                serviceUrl,
+                servicesSwaggerInfo.getSwaggerUrl(route));
         try {
             return restTemplate.getForObject(url, ObjectNode.class);
         } catch (IllegalStateException e) {

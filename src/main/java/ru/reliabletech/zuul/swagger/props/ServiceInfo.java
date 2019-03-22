@@ -19,7 +19,7 @@ class ServiceInfo {
 
     private String swaggerUri;
 
-    private String directSwaggerDocUrl;
+    private String directSwaggerBaseUrl;
 
     private String protocol = "";
 

@@ -57,8 +57,8 @@ public class ServicesSwaggerInfo {
                 .map(path -> path.replaceAll("^/", "").replaceAll("/\\*\\*", ""));
     }
 
-    public Optional<String> getDirectSwaggerDocUrl(String route) {
+    public Optional<String> getDirectSwaggerBaseUrl(String route) {
         return Optional.ofNullable(routes.get(route))
-                .map(ServiceInfo::getDirectSwaggerDocUrl);
+                .map(ServiceInfo::getDirectSwaggerBaseUrl);
     }
 }
