@@ -1,6 +1,6 @@
 package ru.reliabletech.zuul.swagger.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +20,7 @@ public class ZuulSwaggerController {
     private SwaggerService swaggerService;
 
     @GetMapping("/api-docs")
-    public JsonNode getApiDocs(@RequestParam("route") String route) {
-        return swaggerService.getSwaggerDoc(route);
+    public ObjectNode getApiDocs(@RequestParam("route") String route, @RequestParam(name = "group", required = false) String group) {
+        return swaggerService.getSwaggerDoc(route, group);
     }
 }

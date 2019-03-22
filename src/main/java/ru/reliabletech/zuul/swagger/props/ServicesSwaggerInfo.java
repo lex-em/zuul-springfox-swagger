@@ -19,11 +19,13 @@ import java.util.Set;
 public class ServicesSwaggerInfo {
 
     public static final String DEFAULT_SWAGGER_API_URL = "v2/api-docs";
+    public static final String DEFAULT_SWAGGER_RESOURCES_URL = "swagger-resources";
     public static final String PROTOCOL_DEFAULT = "http://";
 
     private String prefix;
 
     private String defaultSwaggerUrl = DEFAULT_SWAGGER_API_URL;
+    private String defaultSwaggerResourcesUrl = DEFAULT_SWAGGER_RESOURCES_URL;
 
     private String defaultProtocol = PROTOCOL_DEFAULT;
 
@@ -37,6 +39,12 @@ public class ServicesSwaggerInfo {
         return Optional.ofNullable(routes.get(route))
                 .map(ServiceInfo::getSwaggerUri)
                 .orElse(defaultSwaggerUrl);
+    }
+
+    public String getSwaggerResourcesUrl(String route) {
+        return Optional.ofNullable(routes.get(route))
+                .map(ServiceInfo::getSwaggerResourcesUri)
+                .orElse(defaultSwaggerResourcesUrl);
     }
 
     public String getDefaultProtocol(String route) {
