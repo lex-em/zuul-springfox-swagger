@@ -57,16 +57,19 @@ public class GenericSwaggerService implements SwaggerService {
     public List<SwaggerResource> getSwaggerResources(String route) {
         Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
         RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
-        UriComponentsBuilder uriBuilder = getServiceUrlBuilder(route, serviceUrlOpt);
-        String url =  uriBuilder.build().toUriString();
+        String url = getServiceUrlBuilder(route, serviceUrlOpt)
+                .path(servicesSwaggerInfo.getSwaggerResourcesUrl(route))
+                .build()
+                .toUriString();
         try {
             return restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<List<SwaggerResource>>(){})
                     .getBody();
         } catch (IllegalStateException e) {
+            log.error("Some unexpected error while requesting swagger resources from: {}", url);
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         }
     }
 
@@ -74,7 +77,8 @@ public class GenericSwaggerService implements SwaggerService {
     public ObjectNode getOriginalSwaggerDoc(String route, String group) {
         Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
         RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
-        UriComponentsBuilder uriBuilder = getServiceUrlBuilder(route, serviceUrlOpt);
+        UriComponentsBuilder uriBuilder = getServiceUrlBuilder(route, serviceUrlOpt)
+                .path(servicesSwaggerInfo.getSwaggerUrl(route));
         if (group != null) {
             uriBuilder.queryParam("group", group);
         }
@@ -86,8 +90,7 @@ public class GenericSwaggerService implements SwaggerService {
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
-            log.error("Requested resources URL is wrong", e);
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         }
     }
 
@@ -101,7 +104,6 @@ public class GenericSwaggerService implements SwaggerService {
     private UriComponentsBuilder getServiceUrlBuilder(String route, Optional<String> serviceUrlOpt) {
         String serviceUrl = servicesSwaggerInfo.getDirectSwaggerBaseUrl(route)
                 .orElseGet(() -> serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route));
-        return UriComponentsBuilder.fromHttpUrl(serviceUrl)
-                .path(servicesSwaggerInfo.getSwaggerUrl(route));
+        return UriComponentsBuilder.fromHttpUrl(serviceUrl);
     }
 }
