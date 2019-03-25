@@ -1,6 +1,9 @@
 package ru.reliabletech.zuul.swagger.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import springfox.documentation.swagger.web.SwaggerResource;
+
+import java.util.List;
 
 /**
  * Service for operations over connected services swagger documentations
@@ -14,27 +17,26 @@ public interface SwaggerService {
      * Obtain original documentation of service, represented by route
      *
      * @param route
+     * @param group
      * @return
      */
-    ObjectNode getOriginalSwaggerDoc(String route);
+    ObjectNode getOriginalSwaggerDoc(String route, String group);
 
     /**
      * Obtain modified for proxy's swagger-ui documentation of service, represented by route
      *
      * @param route
+     * @param group
      * @return
      */
-    ObjectNode getSwaggerDoc(String route);
+    ObjectNode getSwaggerDoc(String route, String group);
 
     /**
-     * Obtain swagger documentation version for service, represented by route
+     * Requesting swagger resources list from route
      *
      * @param route
      * @return
      */
-    default String getSwaggerVersion(String route) {
-        ObjectNode swaggerDocumentation = getOriginalSwaggerDoc(route);
-        return swaggerDocumentation == null ? "" : swaggerDocumentation.get("swagger").asText();
-    }
+    List<SwaggerResource> getSwaggerResources(String route);
 
 }
