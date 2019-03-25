@@ -64,4 +64,10 @@ public class ServicesSwaggerInfo {
                 .map(ServiceInfo::getPath)
                 .map(path -> path.replaceAll("^/", "").replaceAll("/\\*\\*", ""));
     }
+
+    public boolean groupAllowed(String route, String group) {
+        return Optional.ofNullable(routes.get(route))
+                .map(serviceInfo -> serviceInfo.groupAllowed(group))
+                .orElse(true);
+    }
 }

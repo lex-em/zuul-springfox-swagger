@@ -49,16 +49,19 @@ public class ZuulSwaggerResourceProvider implements SwaggerResourcesProvider {
     private Stream<SwaggerResource> generateSwaggerDocumentationResource(String route) {
         try {
             return swaggerService.getSwaggerResources(route)
-                    .stream()// TODO groups should be filtered 
+                    .stream()
                     .map(swaggerResource -> {
                         MultiValueMap<String, String> queryParams = UriComponentsBuilder.fromUriString(swaggerResource.getUrl())
                                 .build()
                                 .getQueryParams();
+                        String group = queryParams.getFirst("group");
+                        if (group != null && !servicesSwaggerInfo.groupAllowed(route, group)) {
+                            return null;
+                        }
                         UriComponentsBuilder swaggerDocRouteBuilder = UriComponentsBuilder.fromPath("/api-docs")
                                 .queryParam("route", route);
                         String routeName = route;
-                        if (queryParams.containsKey("group")) {
-                            String group = queryParams.getFirst("group");
+                        if (group != null) {
                             swaggerDocRouteBuilder.queryParam("group", group);
                             routeName = route + "-" +  group;
                         }
@@ -68,7 +71,8 @@ public class ZuulSwaggerResourceProvider implements SwaggerResourcesProvider {
                         pluginSwaggerResource.setUrl(swaggerDocRouteBuilder.build().toUriString());
                         pluginSwaggerResource.setSwaggerVersion(swaggerVersion);
                         return pluginSwaggerResource;
-                    });
+                    })
+                    .filter(Objects::nonNull);
         } catch (Exception e) {
             log.error(String.format("Some error during obtain swagger documentation for route %s", route), e);
             return Stream.empty();
