@@ -60,6 +60,7 @@ public class GenericSwaggerService implements SwaggerService {
         try {
             return restTemplate.getForObject(url, ObjectNode.class);
         } catch (IllegalStateException e) {
+            log.error("Some unexpected error while requesting swagger docs from: {}", url);
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }

@@ -46,7 +46,7 @@ public class ZuulSwaggerResourceProvider implements SwaggerResourcesProvider {
         try {
             swaggerVersion = swaggerService.getSwaggerVersion(route);
         } catch (Exception e) {
-            log.error(String.format("Some error during obtain swagger documentation for route %s", route), e);
+            log.error(String.format("Some error during obtain swagger documentation for route '%s'", route), e);
             return null;
         }
         SwaggerResource swaggerResource = new SwaggerResource();
