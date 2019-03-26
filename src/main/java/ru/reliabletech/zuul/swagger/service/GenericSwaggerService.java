@@ -2,7 +2,9 @@ package ru.reliabletech.zuul.swagger.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,8 @@ import springfox.documentation.swagger.web.SwaggerResource;
 
 import java.util.List;
 
+import java.util.Optional;
+
 /**
  * General implementation
  *
@@ -22,10 +26,15 @@ import java.util.List;
  * on 27.11.2017.
  */
 @Component
+@Slf4j
 public class GenericSwaggerService implements SwaggerService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    @Qualifier("pureRestTemplate")
+    private RestTemplate pureRestTemplate;
+    @Autowired
+    @Qualifier("loadBalancedRestTemplate")
+    private RestTemplate loadBalancedRestTemplate;
     @Autowired
     private ServicesSwaggerInfo servicesSwaggerInfo;
     @Autowired
@@ -46,27 +55,29 @@ public class GenericSwaggerService implements SwaggerService {
 
     @Override
     public List<SwaggerResource> getSwaggerResources(String route) {
-        String serviceUrl = servicesSwaggerInfo.getServiceUrl(route)
-                .orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(serviceUrl)
-                .path(servicesSwaggerInfo.getSwaggerResourcesUrl(route));
-        String url =  uriBuilder.build().toUriString();
+        Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
+        RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
+        String url = getServiceUrlBuilder(route, serviceUrlOpt)
+                .path(servicesSwaggerInfo.getSwaggerResourcesUrl(route))
+                .build()
+                .toUriString();
         try {
             return restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<List<SwaggerResource>>(){})
                     .getBody();
         } catch (IllegalStateException e) {
+            log.error("Some unexpected error while requesting swagger resources from: {}", url);
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         }
     }
 
     @Override
     public ObjectNode getOriginalSwaggerDoc(String route, String group) {
-        String serviceUrl = servicesSwaggerInfo.getServiceUrl(route)
-                .orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route);
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(serviceUrl)
+        Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
+        RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
+        UriComponentsBuilder uriBuilder = getServiceUrlBuilder(route, serviceUrlOpt)
                 .path(servicesSwaggerInfo.getSwaggerUrl(route));
         if (group != null) {
             uriBuilder.queryParam("group", group);
@@ -75,10 +86,24 @@ public class GenericSwaggerService implements SwaggerService {
         try {
             return restTemplate.getForObject(url, ObjectNode.class);
         } catch (IllegalStateException e) {
+            log.error("Some unexpected error while requesting swagger docs from: {}", url);
             if (e.getMessage() == null || !e.getMessage().startsWith("No instances available for")) {
                 throw e;
             }
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         }
+    }
+
+    private RestTemplate getRestTemplate(boolean isUrlBased) {
+        if (isUrlBased) {
+            return pureRestTemplate;
+        }
+        return loadBalancedRestTemplate;
+    }
+
+    private UriComponentsBuilder getServiceUrlBuilder(String route, Optional<String> serviceUrlOpt) {
+        String serviceUrl = servicesSwaggerInfo.getDirectSwaggerBaseUrl(route)
+                .orElseGet(() -> serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route));
+        return UriComponentsBuilder.fromHttpUrl(serviceUrl);
     }
 }

@@ -21,6 +21,10 @@ class ServiceInfo {
 
     private String swaggerUri;
 
+    private String directSwaggerBaseUrl;
+
+    private String directSwaggerPath;
+
     private String swaggerResourcesUri;
 
     private String protocol = "";

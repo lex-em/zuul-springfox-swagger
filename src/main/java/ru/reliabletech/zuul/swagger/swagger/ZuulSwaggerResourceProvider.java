@@ -74,7 +74,7 @@ public class ZuulSwaggerResourceProvider implements SwaggerResourcesProvider {
                     })
                     .filter(Objects::nonNull);
         } catch (Exception e) {
-            log.error(String.format("Some error during obtain swagger documentation for route %s", route), e);
+            log.error(String.format("Some error during obtain swagger documentation for route '%s'", route), e);
             return Stream.empty();
         }
     }

@@ -60,14 +60,30 @@ public class ServicesSwaggerInfo {
     }
 
     public Optional<String> getServicePath(String route) {
+        Optional<String> directPath = getDirectSwaggerBaseUrl(route)
+                .flatMap(x -> getDirectSwaggerPath(route));
+        if (directPath.isPresent()) {
+            return directPath;
+        }
         return Optional.ofNullable(routes.get(route))
                 .map(ServiceInfo::getPath)
                 .map(path -> path.replaceAll("^/", "").replaceAll("/\\*\\*", ""));
+    }
+
+    public Optional<String> getDirectSwaggerBaseUrl(String route) {
+        return Optional.ofNullable(routes.get(route))
+                .map(ServiceInfo::getDirectSwaggerBaseUrl);
+    }
+
+    public Optional<String> getDirectSwaggerPath(String route) {
+        return Optional.ofNullable(routes.get(route))
+                .map(ServiceInfo::getDirectSwaggerPath);
     }
 
     public boolean groupAllowed(String route, String group) {
         return Optional.ofNullable(routes.get(route))
                 .map(serviceInfo -> serviceInfo.groupAllowed(group))
                 .orElse(true);
+
     }
 }
