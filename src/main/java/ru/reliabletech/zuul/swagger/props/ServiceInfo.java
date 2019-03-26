@@ -27,7 +27,7 @@ class ServiceInfo {
 
     private String swaggerResourcesUri;
 
-    private String protocol = "";
+    private String protocol;
 
     private Set<String> allowedGroups;
 

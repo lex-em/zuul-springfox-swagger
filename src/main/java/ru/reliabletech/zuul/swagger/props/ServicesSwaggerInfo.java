@@ -47,7 +47,7 @@ public class ServicesSwaggerInfo {
                 .orElse(defaultSwaggerResourcesUrl);
     }
 
-    public String getDefaultProtocol(String route) {
+    public String getProtocol(String route) {
         return Optional.ofNullable(routes.get(route))
                 .map(ServiceInfo::getProtocol)
                 .orElse(defaultProtocol);
@@ -56,7 +56,7 @@ public class ServicesSwaggerInfo {
     public Optional<String> getServiceUrl(String route) {
         return Optional.ofNullable(routes.get(route))
                 .map(ServiceInfo::getUrl)
-                .map(url -> String.format("%s%s/", getDefaultProtocol(route), url));
+                .map(url -> String.format("%s%s/", getProtocol(route), url));
     }
 
     public Optional<String> getServicePath(String route) {

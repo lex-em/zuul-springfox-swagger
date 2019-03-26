@@ -20,17 +20,25 @@ Plugin extends ZUUL configuration:
 zuul:
     prefix: /api
     default-swagger-url: v2/api-docs # additional path for swagger documentation, default: v2/api-docs
+    default-protocol: http # default target service protocol, default: http
+    default-swagger-resources-url: swagger-resources # API, that returns list of springfox swagger resources, default: swagger-resources
     routes:
         service1:
             path: /service-1/**
             serviceId: service1
-            swaggerUrl: # additional custom path for swagger documentation, use zuul.default-swagger-url as default
-            protocol: http:// # additional protocol info, default: http:// 
+            swaggerUri: api-documentation # additional custom path for swagger documentation, use zuul.default-swagger-url as default
+            protocol: https:// # additional protocol info, default: http://
+            allowedGroups: # springfox swagger groups filtering. if list not defined or empty - all groups are showed.
+              - securityGroup 
         service2:
-            path: /other-service/**
-            serviceId: some-service
-            swaggerUrl: api-documentation
-            protocol: https://
+            path: /shop/**
+            url: http://${some-service-host}:${some-service-port}/api/shop # mapping for subset of API
+            swaggerResourcesUri: swagger-resources # for services, that implement independent API for springfox swagger resources
+            directSwaggerBaseUrl: http://${some-service-host}:${some-service-port}/ # in case when mapped only subset of API
+                                                                                    # we need to say where the root of app
+                                                                                    # otherwise swagger docs will requested from `url` as base
+            directSwaggerPath: / # direct path to docs, that is relative from zuul.prefix in external calls (i.e. from /api/shop/)
+            stripPrefix: false
 ```
 To turn plugin on just put annotation `@EnableZuulSpringfoxSwagger`:
 ```java
@@ -41,12 +49,12 @@ public class YourConfiguration {
 }
 ```
 
-Also plugin needs Swagger2 and RestTemplate (load balanced is preferable) to be configured.
-
-If the project configuration do not contain that, then it will be configured automatically (since version 0.1.1).
+Plugin will configure two `RestTemplate`, one is `@LoadBalanced` and one is pure.
 
 Since 0.2.0 version plugin supports versioned api (and other with route transformations via ServiceRouteMapper).
 Any `org.springframework.cloud.netflix.zuul.filters.discovery.ServiceRouteMapper` bean will turn on this approach, but here some nuances, described in #3.
+
+Since 0.3.0 version plugin supports swagger resources calls and groups (#6). Also since 0.3.0 supports proxied services via url, not service registry info (#5, look at `url` and `direct*` properties).
 ### Dependency 
 ```groovy
 repositories {

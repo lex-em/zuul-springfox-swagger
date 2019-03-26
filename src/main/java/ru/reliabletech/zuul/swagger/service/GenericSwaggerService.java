@@ -57,7 +57,7 @@ public class GenericSwaggerService implements SwaggerService {
     public List<SwaggerResource> getSwaggerResources(String route) {
         Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
         RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
-        String url = getServiceUrlBuilder(route, serviceUrlOpt)
+        String url = getServiceSwaggerBaseUrlBuilder(route, serviceUrlOpt)
                 .path(servicesSwaggerInfo.getSwaggerResourcesUrl(route))
                 .build()
                 .toUriString();
@@ -77,7 +77,7 @@ public class GenericSwaggerService implements SwaggerService {
     public ObjectNode getOriginalSwaggerDoc(String route, String group) {
         Optional<String> serviceUrlOpt = servicesSwaggerInfo.getServiceUrl(route);
         RestTemplate restTemplate = getRestTemplate(serviceUrlOpt.isPresent());
-        UriComponentsBuilder uriBuilder = getServiceUrlBuilder(route, serviceUrlOpt)
+        UriComponentsBuilder uriBuilder = getServiceSwaggerBaseUrlBuilder(route, serviceUrlOpt)
                 .path(servicesSwaggerInfo.getSwaggerUrl(route));
         if (group != null) {
             uriBuilder.queryParam("group", group);
@@ -101,9 +101,9 @@ public class GenericSwaggerService implements SwaggerService {
         return loadBalancedRestTemplate;
     }
 
-    private UriComponentsBuilder getServiceUrlBuilder(String route, Optional<String> serviceUrlOpt) {
+    private UriComponentsBuilder getServiceSwaggerBaseUrlBuilder(String route, Optional<String> serviceUrlOpt) {
         String serviceUrl = servicesSwaggerInfo.getDirectSwaggerBaseUrl(route)
-                .orElseGet(() -> serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getDefaultProtocol() + route));
+                .orElseGet(() -> serviceUrlOpt.orElseGet(() -> servicesSwaggerInfo.getProtocol(route) + route));
         return UriComponentsBuilder.fromHttpUrl(serviceUrl);
     }
 }
