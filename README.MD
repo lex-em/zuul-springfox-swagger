@@ -52,9 +52,9 @@ public class YourConfiguration {
 Plugin will configure two `RestTemplate`, one is `@LoadBalanced` and one is pure.
 
 Since 0.2.0 version plugin supports versioned api (and other with route transformations via ServiceRouteMapper).
-Any `org.springframework.cloud.netflix.zuul.filters.discovery.ServiceRouteMapper` bean will turn on this approach, but here some nuances, described in #3.
+Any `org.springframework.cloud.netflix.zuul.filters.discovery.ServiceRouteMapper` bean will turn on this approach, but here some nuances, described in [#3](https://github.com/lex-em/zuul-springfox-swagger/issues/3).
 
-Since 0.3.0 version plugin supports swagger resources calls and groups (#6). Also since 0.3.0 supports proxied services via url, not service registry info (#5, look at `url` and `direct*` properties).
+Since 0.3.0 version plugin supports swagger resources calls and groups ([#6](https://github.com/lex-em/zuul-springfox-swagger/issues/6)). Also since 0.3.0 supports proxied services via url, not service registry info ([#5](https://github.com/lex-em/zuul-springfox-swagger/issues/5), look at `url` and `direct*` properties).
 ### Dependency 
 ```groovy
 repositories {
