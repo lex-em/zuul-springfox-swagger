@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 // project properties
 group 'ru.reliabletech'
 def libName = 'zuul-springfox-swagger'
-version '0.2.2-SNAPSHOT'
+version '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
 def currentDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
