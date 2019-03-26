@@ -2,6 +2,8 @@ package ru.reliabletech.zuul.swagger.props;
 
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * Service info
  *
@@ -19,6 +21,18 @@ class ServiceInfo {
 
     private String swaggerUri;
 
-    private String protocol = "";
+    private String directSwaggerBaseUrl;
+
+    private String directSwaggerPath;
+
+    private String swaggerResourcesUri;
+
+    private String protocol;
+
+    private Set<String> allowedGroups;
+
+    public boolean groupAllowed(String group) {
+        return allowedGroups == null || allowedGroups.isEmpty() || allowedGroups.contains(group);
+    }
 
 }

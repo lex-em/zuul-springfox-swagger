@@ -31,10 +31,14 @@ public class ZuulSpringfoxSwaggerConfiguration {
     @EnableSwagger2
     public static final class EnableSwagger2Config {}
 
-    @ConditionalOnMissingBean(RestTemplate.class)
     @LoadBalanced
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate loadBalancedRestTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public RestTemplate pureRestTemplate() {
         return new RestTemplate();
     }
 
